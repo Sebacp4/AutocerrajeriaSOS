@@ -362,7 +362,7 @@
                 </span>
               </div>
 
-              <h1 class="font-heading text-5xl md:text-7xl lg:text-[80px] leading-[0.9] tracking-tight font-semibold text-white mb-6 uppercase">
+              <h1 class="leading-[0.9] uppercase md:text-7xl lg:text-[80px] text-5xl font-semibold text-white tracking-tight font-heading text-left mb-6">
                 <span class="lang-es">
                   Autocerrajería móvil
                   <br>
@@ -375,21 +375,12 @@
                 </span>
               </h1>
 
-              <div class="flex items-center gap-4 mb-8">
-                <p class="text-gray-300 text-lg mb-8 max-w-lg">
+              <div class="flex flex-col gap-6 w-full max-w-2xl mb-10 gap-x-6 gap-y-6">
+                <p class="md:text-lg leading-relaxed text-base text-gray-300 text-center">
                   <span class="lang-es">
-                    <span class="hidden md:inline">
-                      Somos un servicio móvil de autocerrajería automotriz en
-                      Puerto Rico. Nos especializamos en programación de llaves
-                      inteligentes, llaves con chip, duplicados, cortes y
-                      apertura de vehículos directamente donde se encuentra el
-                      cliente.
-                    </span>
-                    <span class="md:hidden">
-                      Somos un servicio móvil de autocerrajería automotriz.
-                      Programamos llaves inteligentes, llaves con chip,
-                      duplicados y aperturas directamente donde estés.
-                    </span>
+                    Somos un servicio móvil de autocerrajería automotriz a
+                    domicilio en PR. Programamos llaves inteligentes, llaves con
+                    chip, duplicados y aperturas directamente donde estés.
                   </span>
                   <span class="lang-en">
                     We are a mobile automotive locksmith service in Puerto Rico.
@@ -397,21 +388,24 @@
                     duplicates, key cutting, and vehicle lockout assistance
                     directly at the customer’s location.
                   </span>
-                </p>
-                <p class="text-gray-300 font-bold text-sm uppercase tracking-widest mb-8 border-l-2 border-secondary pl-4">
-                  <span class="lang-es">
-                    Tecnología, precisión y acceso cuando más lo necesitas.
-                  </span>
-                  <span class="lang-en">
-                    Technology, precision, and access when you need it most.
-                  </span>
-                </p>
+                </p><div class="">
+                  <div class="mx-auto bg-[#D99A1E] w-48 sm:w-64 h-[3px] mb-4"></div>
+                  <p class="text-gray-300 text-center">
+                    <span class="lang-es">
+                      Tecnología, precisión y acceso cuando más lo necesitas.
+                    </span>
+                    <span class="lang-en">
+                      Technology, precision, and access when you need it most.
+                    </span>
+                  </p>
+                </div>
+                
               </div>
 
               <ul class="space-y-3 mb-10 text-sm md:text-base text-gray-300">
                 <div class="flex flex-wrap gap-4 mb-8">
                   <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-3 rounded-std text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
-                    <iconify-icon icon="solar:phone-bold" width="20"></iconify-icon>
+                    <iconify-icon icon="solar:phone-bold" width="20" class=""></iconify-icon>
                     <span class="lang-es">Llamar Ahora</span>
                     <span class="lang-en">Call Now</span>
                   </a>
@@ -548,7 +542,7 @@
                     <span class="lang-en">At-home service</span>
                   </div>
                 </div>
-                <div>
+                <div class="">
                   <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider">
                     7:00 AM+
                   </div>
@@ -557,7 +551,7 @@
                     <span class="lang-en">Mon to Sat</span>
                   </div>
                 </div>
-                <div>
+                <div class="">
                   <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider leading-tight">
                     <span class="lang-es">
                       ÁREA
@@ -611,11 +605,6 @@
                 </p>
               </div>
             </div>
-
-            <a href="#mapa-cobertura" onclick="var el = document.getElementById('mapa-cobertura'); if(el) el.scrollIntoView({behavior: 'smooth'}); return false;" class="block text-center w-full py-4 border border-border-std bg-main/50 hover:bg-main text-white text-xs font-bold uppercase tracking-widest rounded-md transition-colors mt-auto">
-              <span class="lang-es">Ver área de servicio</span>
-              <span class="lang-en">View service area</span>
-            </a>
           </div>
 
           <!-- Right Card: Map -->
@@ -624,7 +613,7 @@
               <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.08),_transparent_60%)] pointer-events-none transition-opacity duration-500 group-hover:opacity-100 opacity-70"></div>
 
               <!-- Placeholder image (replace src when ready) -->
-              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/319b73a8-bc2e-4b22-bd36-66f8a47fead3_3840w.png" alt="Mapa de cobertura de Autocerrajería SOS en el área metro de Puerto Rico" class="opacity-100 w-full h-full object-cover absolute top-0 right-0 bottom-0 left-0" loading="lazy">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/153d0ad9-4c7d-41b2-879f-542e7b25490b_800w.png" alt="Mapa de cobertura de Autocerrajería SOS en el área metro de Puerto Rico" class="opacity-100 w-full h-full object-contain md:object-cover absolute top-0 right-0 bottom-0 left-0" loading="lazy">
 
               <div class="absolute top-4 right-4 bg-main/90 backdrop-blur-md border border-border-std px-3 py-1.5 rounded-md shadow-lg flex items-center gap-2 z-20">
                 <div class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-glow"></div>
@@ -1167,7 +1156,7 @@
                 soon as possible.
               </span>
             </p>
-            <form action="https://formsubmit.co/autocerrajeriasos@gmail.com" method="POST" class="space-y-4" data-aura-form="true">
+            <form action="https://formsubmit.co/autocerrajeriasos@gmail.com" method="POST" class="space-y-4" data-aura-form="true" data-ajax-setup="true">
               <input type="hidden" name="_subject" value="Nueva Solicitud de Cotización - Autocerrajería SOS">
               <input type="hidden" name="_captcha" value="false">
               <input type="hidden" name="_template" value="table">
@@ -1354,15 +1343,23 @@
           </p>
         </div>
         <div class="glass-card p-6 rounded-lg border border-border-std">
-          <span class="lang-es">
-            Trabajamos principalmente en San Juan, Carolina, Bayamón, Cataño,
-            Guaynabo, Trujillo Alto, Canóvanas, Río Grande y áreas cercanas del
-            área metro.
-          </span>
-          <span class="lang-en">
-            We mainly work in San Juan, Carolina, Bayamón, Cataño, Guaynabo,
-            Trujillo Alto, Canóvanas, Río Grande, and nearby metro areas.
-          </span>
+          <h3 class="text-white font-bold text-lg mb-2">
+            <span class="lang-es">2. ¿En qué áreas brindan servicio?</span>
+            <span class="lang-en">
+              2. In what areas do you provide service?
+            </span>
+          </h3>
+          <p class="text-gray-300 text-sm">
+            <span class="lang-es">
+              Trabajamos principalmente en San Juan, Carolina, Bayamón, Cataño,
+              Guaynabo, Trujillo Alto, Canóvanas, Río Grande y áreas cercanas
+              del área metro.
+            </span>
+            <span class="lang-en">
+              We mainly work in San Juan, Carolina, Bayamón, Cataño, Guaynabo,
+              Trujillo Alto, Canóvanas, Río Grande, and nearby metro areas.
+            </span>
+          </p>
         </div>
         <div class="glass-card p-6 rounded-lg border border-border-std">
           <h3 class="text-white font-bold text-lg mb-2">
