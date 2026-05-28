@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-VRBBPLR7R4"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-VRBBPLR7R4');
+</script>
+<script>
+gtag('config', 'AW-17526887623/1L-5COmIhbUcEMepvKVB', {
+'phone_conversion_number': '(787) 201-1050'
+});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Autocerrajería SOS ofrece servicio móvil de programación de llaves con chip, smart keys, duplicado de llaves, corte automotriz y apertura de vehículos en el área metro de Puerto Rico.">
+<title>
+Autocerrajería SOS | Cerrajero Automotriz Móvil en Puerto Rico
+</title>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&amp;family=Genos:ital,wght@0,300..900;1,300..900&amp;family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet">
+<!-- Iconify -->
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+darkMode: 'class',
+theme: {
+extend: {
+colors: {
+primary: "#ff0000",
+'primary-bright': "#ff3333",
+secondary: "#0055ff",
+main: "#050505",
+alt: "#111111",
+deep: "#000000",
+glass: "rgba(20, 20, 20, 0.8)",
+'border-std': "rgba(60, 60, 60, 0.6)",
+chrome: "#e0e0e0"
+},
+fontFamily: {
+sans: ['"Open Sans"', 'sans-serif'],
+heading: ['"Genos"', 'sans-serif'],
+brand: ['"Audiowide"', 'sans-serif'],
+},
+borderRadius: {
+std: '8px',
+lg: '16px',
+pill: '999px',
+},
+boxShadow: {
+'glow': '0 0 15px rgba(255, 0, 0, 0.4)',
+'glow-blue': '0 0 15px rgba(0, 85, 255, 0.3)',
+},
+animation: {
+'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+}
+}
+}
+}
+</script>
+<style>
+/* Custom Styles & Scrollbar */
+body {
+background-color: #000000;
+background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 70%);
+}
+::-webkit-scrollbar {
+width: 8px;
+}
+::-webkit-scrollbar-track {
+background: #050505;
+}
+::-webkit-scrollbar-thumb {
+background: rgba(60, 60, 60, 0.6);
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #ff0000;
+}
+/* Racing Gradient Shimmer */
+@keyframes shimmer {
+0% { background-position: 200% center; }
+100% { background-position: -200% center; }
+}
+.btn-shimmer {
+background: linear-gradient(135deg, #cc0000 0%, #ff3333 50%, #cc0000 100%);
+background-size: 200% auto;
+animation: shimmer 4s linear infinite;
+color: #fff;
+}
+.btn-shimmer:hover {
+box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+}
+.btn-whatsapp {
+background: linear-gradient(135deg, #25D366 0%, #128C7E 50%, #25D366 100%);
+background-size: 200% auto;
+animation: shimmer 4s linear infinite;
+color: #fff;
+}
+.btn-whatsapp:hover {
+box-shadow: 0 0 15px rgba(37, 211, 102, 0.6);
+}
+/* Glassmorphism utility */
+.glass-card {
+background: linear-gradient(145deg, rgba(30, 30, 30, 0.8), rgba(15, 15, 15, 0.9));
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border: 1px solid rgba(80, 80, 80, 0.4);
+border-top: 1px solid rgba(120, 120, 120, 0.5);
+box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.5);
+}
+/* Chrome effect text */
+.text-chrome {
+background: linear-gradient(to bottom, #ffffff 0%, #a0a0a0 50%, #ffffff 100%);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
+}
+@media (prefers-reduced-motion: reduce) {
+.btn-shimmer, .btn-whatsapp, .animate-pulse-slow, .animate-pulse {
+animation: none !important;
+}
+}
+/* Carbon fiber texture subtle overlay */
+.carbon-bg {
+background-image:
+linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111),
+linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111);
+background-size: 4px 4px;
+background-position: 0 0, 2px 2px;
+background-color: #1a1a1a;
+}
+[data-lang="en"] .lang-es { display: none !important; }
+[data-lang="es"] .lang-en { display: none !important; }
+</style>
+<script src="https://www.aura.build/FxFilter.js"></script>
+<meta property="og:title" content="Autocerrajería SOS | Servicio móvil de llaves automotrices en Puerto Rico">
+<meta property="og:description" content="Programación de llaves inteligentes, llaves con chip, duplicados, corte de llaves y apertura de vehículos directamente donde estés.">
+<meta property="og:image" content="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5d3f7b45-28d2-4505-a37a-98828d6ff98e_1600w.png">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://www.autocerrajeriasos.com/">
+<script type="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "LocalBusiness",
+"name": "Autocerrajería SOS",
+"image": "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_320w.png",
+"@id": "https://www.autocerrajeriasos.com/",
+"url": "https://www.autocerrajeriasos.com/",
+"telephone": "+1 787-201-1050",
+"email": "autocerrajeriasos@gmail.com",
+"address": {
+"@type": "PostalAddress",
+"addressRegion": "PR",
+"addressCountry": "US"
+},
+"areaServed": [
+"Puerto Rico",
+"San Juan",
+"Carolina",
+"Bayamón",
+"Canóvanas",
+"Río Grande",
+"Área Metro PR"
+],
+"openingHoursSpecification": {
+"@type": "OpeningHoursSpecification",
+"dayOfWeek": [
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday"
+],
+"opens": "07:00",
+"closes": "18:00"
+},
+"description": "Automotive locksmith mobile service."
+}
+</script></head>
+  <body class="bg-main text-gray-100 font-sans antialiased flex flex-col min-h-screen selection:bg-primary selection:text-black" data-lang="es">
+    <!-- Background (image) added by Aura -->
+    <div class="fixed top-0 w-full h-screen bg-cover bg-center -z-10" style="background-image: url(&quot;https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_3840w.png&quot;);; mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)" data-alpha-mask="80"></div>
+    <!-- Skip Link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-black px-4 py-2 rounded-md z-50">
+      Skip to content
+    </a>
+
+    <!-- Top Bar -->
+    <div class="bg-deep border-b border-border-std text-xs py-2 hidden md:block">
+      <div class="max-w-[1280px] mx-auto px-4 lg:px-8 flex justify-between items-center">
+        <div class="flex items-center gap-6 text-gray-400">
+          <a href="mailto:autocerrajeriasos@gmail.com" class="flex items-center gap-2 hover:text-white transition-colors shrink-0">
+            <span class="w-6 h-6 rounded-full bg-alt border border-border-std flex items-center justify-center text-primary shadow-inner">
+              <iconify-icon icon="solar:letter-linear" width="14" stroke-width="1.5"></iconify-icon>
+            </span>
+            autocerrajeriasos@gmail.com
+          </a>
+          <a href="tel:7872011050" class="flex items-center gap-2 hover:text-white transition-colors shrink-0">
+            <span class="w-6 h-6 rounded-full bg-alt border border-border-std flex items-center justify-center text-primary shadow-inner">
+              <iconify-icon icon="solar:phone-linear" width="14" stroke-width="1.5" class=""></iconify-icon>
+            </span>
+            (787) 201-1050
+          </a>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="w-6 h-6 rounded-full bg-alt border border-border-std flex items-center justify-center text-primary shadow-inner">
+              <iconify-icon icon="solar:map-point-linear" width="14" stroke-width="1.5" class=""></iconify-icon>
+            </span>
+            <span class="lang-es">Servicio Móvil PR</span>
+            <span class="lang-en">Mobile Service PR</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-4">
+            <button onclick="document.body.setAttribute('data-lang', document.body.getAttribute('data-lang') === 'es' ? 'en' : 'es')" class="bg-alt border border-border-std text-gray-300 px-3 py-1 rounded-pill hover:bg-border-std transition-colors text-xs font-bold">
+              <span class="lang-es">EN</span>
+              <span class="lang-en">ES</span>
+            </button>
+            <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20un%20servicio%20de%20autocerrajer%C3%ADa." target="_blank" class="bg-alt border border-[#25D366] text-[#25D366] px-3 py-1 rounded-pill hover:bg-[#25D366] hover:text-white transition-colors flex items-center gap-1" rel="noopener noreferrer">
+              <iconify-icon icon="ic:baseline-whatsapp"></iconify-icon>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <header class="sticky top-0 z-40 bg-main/90 backdrop-blur-md border-b border-border-std shadow-lg">
+      <div class="max-w-[1280px] mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2 md:gap-3 hover:opacity-90 transition-opacity">
+          <div class="w-[38px] md:w-[50px] h-[38px] md:h-[50px] flex items-center justify-center bg-gradient-to-br from-[#2a2a2a] to-[#0a0a0a] rounded-md border border-gray-500/40 shadow-[0_0_10px_rgba(255,255,255,0.05)] shrink-0 p-1 relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.1),transparent)] pointer-events-none"></div>
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_320w.png" alt="Autocerrajería SOS Logo" class="w-full h-full object-contain relative z-10">
+          </div>
+          <div class="flex flex-col justify-center">
+            <span class="font-brand text-[17px] md:text-[23px] tracking-[0.08em] text-gray-100 uppercase leading-none">
+              Autocerrajería
+              <span class="text-primary">SOS</span>
+            </span>
+            <span class="text-[8.5px] md:text-[10px] tracking-[0.25em] text-gray-400 font-bold uppercase mt-1">
+              <span class="lang-es">Tecnología &amp; Precisión</span>
+              <span class="lang-en">Technology &amp; Precision</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+          <a href="#inicio" class="text-white hover:text-white transition-colors">
+            <span class="lang-es">Inicio</span>
+            <span class="lang-en">Home</span>
+          </a>
+          <a href="#servicios" class="text-gray-400 hover:text-white transition-colors">
+            <span class="lang-es">Servicios</span>
+            <span class="lang-en">Services</span>
+          </a>
+          <a href="#proceso" class="text-gray-400 hover:text-white transition-colors">
+            <span class="lang-es">Proceso</span>
+            <span class="lang-en">Process</span>
+          </a>
+          <a href="#areas" class="text-gray-400 hover:text-white transition-colors">
+            <span class="lang-es">Áreas</span>
+            <span class="lang-en">Areas</span>
+          </a>
+          <a href="#contacto" class="text-gray-400 hover:text-white transition-colors">
+            <span class="lang-es">Contacto</span>
+            <span class="lang-en">Contact</span>
+          </a>
+        </nav>
+
+        <!-- CTA -->
+        <div class="flex items-center gap-4">
+          <div class="hidden md:flex flex-col text-right mr-2">
+            <span class="text-xs text-gray-400 uppercase tracking-wider">
+              <span class="lang-es">Asistencia Móvil</span>
+              <span class="lang-en">Mobile Assistance</span>
+            </span>
+            <a href="tel:7872011050" class="font-heading text-xl tracking-tight text-white font-medium hover:text-gray-300 transition-colors">
+              (787) 201-1050
+            </a>
+          </div>
+          <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white uppercase inline-flex items-center gap-2 text-sm font-bold tracking-widest rounded-pill pt-2.5 pr-6 pb-2.5 pl-6 shadow-[0_0_15px_rgba(37,211,102,0.4)] -translate-x-2 scale-75 transition-colors">
+            <iconify-icon icon="solar:phone-calling-linear" width="18" stroke-width="1.5" class=""></iconify-icon>
+            <span class="lang-es">Llamar Ahora</span>
+            <span class="lang-en">Call Now</span>
+          </a>
+        </div>
+      </div>
+      <!-- Decorative subtle gradient line -->
+      <div class="lg:hidden w-full bg-main border-t border-border-std overflow-x-auto flex items-center px-4 py-2 gap-2 [&amp;::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <a href="#inicio" onclick="var el = document.getElementById('inicio'); if(el) el.scrollIntoView({behavior: 'auto'}); return false;" class="shrink-0 px-4 py-1.5 rounded-pill text-[10px] font-bold text-gray-300 border border-border-std bg-alt hover:text-white hover:border-gray-500/50 active:text-white active:border-gray-500/50 transition-colors uppercase tracking-widest">
+          <span class="lang-es">Inicio</span>
+          <span class="lang-en">Home</span>
+        </a>
+        <a href="#servicios" onclick="var el = document.getElementById('servicios'); if(el) el.scrollIntoView({behavior: 'auto'}); return false;" class="shrink-0 px-4 py-1.5 rounded-pill text-[10px] font-bold text-gray-300 border border-border-std bg-alt hover:text-white hover:border-gray-500/50 active:text-white active:border-gray-500/50 transition-colors uppercase tracking-widest">
+          <span class="lang-es">Servicios</span>
+          <span class="lang-en">Services</span>
+        </a>
+        <a href="#proceso" onclick="var el = document.getElementById('proceso'); if(el) el.scrollIntoView({behavior: 'auto'}); return false;" class="shrink-0 px-4 py-1.5 rounded-pill text-[10px] font-bold text-gray-300 border border-border-std bg-alt hover:text-white hover:border-gray-500/50 active:text-white active:border-gray-500/50 transition-colors uppercase tracking-widest">
+          <span class="lang-es">Proceso</span>
+          <span class="lang-en">Process</span>
+        </a>
+        <a href="#areas" onclick="var el = document.getElementById('areas'); if(el) el.scrollIntoView({behavior: 'auto'}); return false;" class="shrink-0 px-4 py-1.5 rounded-pill text-[10px] font-bold text-gray-300 border border-border-std bg-alt hover:text-white hover:border-gray-500/50 active:text-white active:border-gray-500/50 transition-colors uppercase tracking-widest">
+          <span class="lang-es">Áreas</span>
+          <span class="lang-en">Areas</span>
+        </a>
+        <div class="ml-auto pl-2 shrink-0">
+          <button onclick="document.body.setAttribute('data-lang', document.body.getAttribute('data-lang') === 'es' ? 'en' : 'es')" class="px-3 py-1.5 rounded-pill text-[10px] font-bold text-white border border-gray-500/50 bg-gray-500/10 hover:bg-gray-500/20 active:bg-gray-500/30 transition-colors uppercase tracking-wider flex items-center gap-1">
+            <span class="lang-es">EN</span>
+            <span class="lang-en">ES</span>
+          </button>
+        </div>
+      </div>
+      <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-gray-400/30 to-transparent absolute bottom-0"></div>
+    </header>
+
+    <main id="main-content" class="flex-grow">
+      <!-- Floating Elements -->
+      <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20un%20servicio%20de%20autocerrajer%C3%ADa." class="fixed bottom-6 left-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center bg-alt border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors shadow-lg" target="_blank" rel="noopener noreferrer">
+        <iconify-icon icon="ic:baseline-whatsapp" width="24" class="text-current transition-colors"></iconify-icon>
+      </a>
+      <a href="tel:7872011050" class="fixed bottom-6 right-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center bg-[#25D366] hover:bg-[#128C7E] shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
+        <iconify-icon icon="solar:phone-bold" width="24" class="text-white"></iconify-icon>
+      </a>
+
+      <!-- Cookie Banner (Glassmorphism overlap as in screenshot) -->
+
+      <!-- Hero Section -->
+      <section class="relative pt-12 pb-24 overflow-hidden carbon-bg" id="inicio">
+        <!-- Radial background glow -->
+        <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-white/5 rounded-full blur-[100px] -z-10 pointer-events-none">
+          <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-white/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+          <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        </div>
+
+        <div class="max-w-[1280px] mx-auto px-4 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Content Left -->
+            <div class="flex flex-col items-start z-10">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="w-[70px] md:w-[90px] h-[70px] md:h-[90px] rounded-xl border border-gray-400/40 bg-gradient-to-br from-[#2a2a2a] to-[#0a0a0a] p-2 md:p-3 shadow-[0_0_25px_rgba(255,255,255,0.05)] flex items-center justify-center shrink-0 relative overflow-hidden">
+                  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.15),transparent)] pointer-events-none"></div>
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_320w.png" alt="Autocerrajería SOS Icon" class="w-full h-full object-contain relative z-10 drop-shadow-xl">
+                </div>
+                <div class="flex flex-col justify-center">
+                  <span class="font-brand text-[22px] md:text-[32px] tracking-[0.1em] text-white uppercase leading-none">
+                    Autocerrajería
+                    <span class="text-primary">SOS</span>
+                  </span>
+                  <span class="text-[10px] md:text-[12px] tracking-[0.25em] text-gray-400 font-bold uppercase mt-2">
+                    <span class="lang-es">Tecnología &amp; Precisión</span>
+                    <span class="lang-en">Technology &amp; Precision</span>
+                  </span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-gray-400 mb-6 font-medium uppercase tracking-wider">
+                <span class="text-secondary font-bold">
+                  <span class="lang-es">Servicio Móvil</span>
+                  <span class="lang-en">Mobile Service</span>
+                </span>
+                <iconify-icon icon="solar:alt-arrow-right-linear" class=""></iconify-icon>
+                <span class="text-chrome">
+                  <span class="lang-es">Área Metro, PR</span>
+                  <span class="lang-en">Metro Area, PR</span>
+                </span>
+              </div>
+
+              <h1 class="leading-[0.9] uppercase md:text-7xl lg:text-[80px] text-5xl font-semibold text-white tracking-tight font-heading text-left mb-6">
+                <span class="lang-es">
+                  Cerrajería Automotriz a domicilio
+                  <br>
+                  <span class="text-chrome">en PR</span>
+                </span>
+                <span class="lang-en">
+                  Mobile Auto Locksmith
+                  <br>
+                  <span class="text-chrome">in PR</span>
+                </span>
+              </h1>
+
+              <div class="flex flex-col gap-6 w-full max-w-2xl mb-10 gap-x-6 gap-y-6">
+                <p class="md:text-lg leading-relaxed text-base text-gray-300 text-center">
+                  <span class="lang-es">
+                    Somos un servicio móvil de cerrajería automotriz a domicilio
+                    en PR. Programamos llaves inteligentes, llaves con chip,
+                    duplicados y aperturas directamente donde estés.
+                  </span>
+                  <span class="lang-en">
+                    We are a mobile automotive locksmith service in Puerto Rico.
+                    We specialize in smart key programming, chip keys,
+                    duplicates, key cutting, and vehicle lockout assistance
+                    directly at the customer’s location.
+                  </span>
+                </p>
+                <div class="">
+                  <div class="mx-auto bg-[#D99A1E] w-48 sm:w-64 h-[3px] mb-4"></div>
+                  <p class="text-gray-300 text-center">
+                    <span class="lang-es">
+                      Tecnología, precisión y acceso cuando más lo necesitas.
+                    </span>
+                    <span class="lang-en">
+                      Technology, precision, and access when you need it most.
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <ul class="space-y-3 mb-10 text-sm md:text-base text-gray-300">
+                <div class="flex flex-wrap gap-4 mb-8">
+                  <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-3 rounded-std text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
+                    <iconify-icon icon="solar:phone-bold" width="20" class=""></iconify-icon>
+                    <span class="lang-es">Llamar Ahora</span>
+                    <span class="lang-en">Call Now</span>
+                  </a>
+                  <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20un%20servicio%20de%20autocerrajer%C3%ADa." target="_blank" class="bg-transparent border border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white px-8 py-3 rounded-std text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2 transition-colors" rel="noopener noreferrer">
+                    <iconify-icon icon="ic:baseline-whatsapp" width="20"></iconify-icon>
+                    <span class="lang-es">Escribir por WhatsApp</span>
+                    <span class="lang-en">Message on WhatsApp</span>
+                  </a>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-3 py-1 bg-deep/80 border border-border-std rounded-md text-xs text-gray-300 font-medium">
+                    <span class="lang-es">📍 Servicio móvil</span>
+                    <span class="lang-en">📍 Mobile service</span>
+                  </span>
+                  <span class="px-3 py-1 bg-deep/80 border border-border-std rounded-md text-xs text-gray-300 font-medium">
+                    <span class="lang-es">🔑 Llaves inteligentes y chip</span>
+                    <span class="lang-en">🔑 Smart &amp; chip keys</span>
+                  </span>
+                  <span class="px-3 py-1 bg-deep/80 border border-border-std rounded-md text-xs text-gray-300 font-medium">
+                    <span class="lang-es">📝 Cotización personalizada</span>
+                    <span class="lang-en">📝 Custom quotes</span>
+                  </span>
+                </div>
+              </ul>
+            </div>
+
+            <!-- Image Right -->
+            <div class="relative w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden glass-card p-2 z-10">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5d3f7b45-28d2-4505-a37a-98828d6ff98e_1600w.png" alt="Técnico de Autocerrajería SOS programando llave automotriz en Puerto Rico" class="w-full h-full object-cover rounded-xl shadow">
+
+              <!-- Overlay Pill -->
+              <div class="absolute bottom-6 right-6 glass-card px-4 py-2 rounded-pill flex items-center gap-3 shadow-lg">
+                <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-white">
+                  <span class="lang-es">Diagnóstico Automotriz</span>
+                  <span class="lang-en">Auto Diagnostics</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Contact Form (Bento Style) -->
+
+      <!-- Banner & Pills -->
+      <section class="border-y border-border-std bg-alt/50 py-8 mb-24 overflow-hidden">
+        <div class="max-w-[1280px] mx-auto px-4 lg:px-8 text-center">
+          <h2 class="font-heading text-3xl md:text-4xl tracking-tight text-white uppercase font-medium mb-6">
+            <span class="lang-es">Servicio móvil en Puerto Rico</span>
+            <span class="lang-en">Mobile Service in Puerto Rico</span>
+          </h2>
+          <div class="flex flex-wrap justify-center gap-3">
+            <span class="glass-card px-4 py-1.5 rounded-pill text-xs font-medium text-gray-300 border-border-std flex items-center gap-2">
+              <iconify-icon icon="solar:calendar-bold-duotone" class="text-secondary"></iconify-icon>
+              <span class="lang-es">Servicio por cita y disponibilidad</span>
+              <span class="lang-en">By appointment &amp; availability</span>
+            </span>
+            <span class="glass-card px-4 py-1.5 rounded-pill text-xs font-medium text-gray-300 border-border-std flex items-center gap-2">
+              <iconify-icon icon="solar:clock-circle-bold-duotone" class="text-secondary"></iconify-icon>
+              <span class="lang-es">L-S desde 7:00 AM</span>
+              <span class="lang-en">M-S from 7:00 AM</span>
+            </span>
+            <span class="glass-card px-4 py-1.5 rounded-pill text-xs font-medium text-gray-300 border-border-std flex items-center gap-2">
+              <iconify-icon icon="solar:document-text-bold-duotone" class="text-secondary"></iconify-icon>
+              <span class="lang-es">Cotización personalizada</span>
+              <span class="lang-en">Custom quotes</span>
+            </span>
+            <span class="glass-card px-4 py-1.5 rounded-pill text-xs font-medium text-gray-300 border-border-std flex items-center gap-2">
+              <iconify-icon icon="solar:laptop-bold-duotone" class="text-secondary"></iconify-icon>
+              <span class="lang-es">Equipos especializados</span>
+              <span class="lang-en">Specialized equipment</span>
+            </span>
+            <span class="glass-card px-4 py-1.5 rounded-pill text-xs font-medium text-gray-300 border-border-std flex items-center gap-2">
+              <iconify-icon icon="solar:map-point-bold-duotone" class="text-secondary"></iconify-icon>
+              <span class="lang-es">Área metro PR</span>
+              <span class="lang-en">PR Metro Area</span>
+            </span>
+            <span class="glass-card px-4 py-1.5 rounded-pill text-xs font-medium text-gray-300 border-border-std flex items-center gap-2">
+              <iconify-icon icon="solar:star-bold-duotone" class="text-secondary"></iconify-icon>
+              <span class="lang-es">1 año de experiencia</span>
+              <span class="lang-en">1 year experience</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- About (Media/Text Split) -->
+
+      <!-- Service Area (Bento Grid Map) -->
+      <section class="max-w-[1280px] mx-auto px-4 lg:px-8 mb-24 relative" id="areas">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/5 via-main to-main -z-10 blur-[100px]"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left Card: Content -->
+          <div class="lg:col-span-5 glass-card rounded-lg p-8 md:p-10 flex flex-col justify-between">
+            <div class="">
+              <h2 class="font-heading text-3xl md:text-4xl font-medium text-white uppercase tracking-tight mb-6">
+                <span class="lang-es">
+                  Servicio Móvil en el
+                  <br>
+                  Área Metro de
+                  <br>
+                  Puerto Rico
+                </span>
+                <span class="lang-en">
+                  Mobile Service in the
+                  <br>
+                  PR Metro Area
+                </span>
+              </h2>
+
+              <p class="text-sm text-gray-400 mb-8">
+                <span class="lang-es">
+                  Ofrecemos servicio móvil en gran parte del área metro,
+                  incluyendo San Juan, Carolina, Bayamón, Canóvanas y Río
+                  Grande.
+                </span>
+                <span class="lang-en">
+                  We offer mobile service across much of the metro area,
+                  including San Juan, Carolina, Bayamón, Canóvanas and Río
+                  Grande.
+                </span>
+              </p>
+
+              <div class="grid grid-cols-3 gap-2 md:gap-4 mb-8">
+                <div class="">
+                  <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider">
+                    <span class="lang-es">100% MÓVIL</span>
+                    <span class="lang-en">100% MOBILE</span>
+                  </div>
+                  <div class="text-[8px] md:text-[9px] text-gray-500 uppercase tracking-widest font-bold mt-1">
+                    <span class="lang-es">Servicio a domicilio</span>
+                    <span class="lang-en">At-home service</span>
+                  </div>
+                </div>
+                <div class="">
+                  <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider">
+                    7:00 AM+
+                  </div>
+                  <div class="text-[8px] md:text-[9px] text-gray-500 uppercase tracking-widest font-bold mt-1">
+                    <span class="lang-es">Lunes a sábado</span>
+                    <span class="lang-en">Mon to Sat</span>
+                  </div>
+                </div>
+                <div class="">
+                  <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider leading-tight">
+                    <span class="lang-es">
+                      ÁREA
+                      <br>
+                      METRO PR
+                    </span>
+                    <span class="lang-en">
+                      METRO
+                      <br>
+                      AREA PR
+                    </span>
+                  </div>
+                  <div class="text-[8px] md:text-[9px] text-gray-500 uppercase tracking-widest font-bold mt-2">
+                    <span class="lang-es">Cobertura principal</span>
+                    <span class="lang-en">Main coverage</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 mb-8">
+                <span class="px-3 py-1.5 bg-main border border-border-std rounded-full text-xs text-gray-300">
+                  San Juan
+                </span>
+                <span class="px-3 py-1.5 bg-main border border-border-std rounded-full text-xs text-gray-300">
+                  Carolina
+                </span>
+                <span class="px-3 py-1.5 bg-main border border-border-std rounded-full text-xs text-gray-300">
+                  Bayamón
+                </span>
+                <span class="px-3 py-1.5 bg-main border border-border-std rounded-full text-xs text-gray-300">
+                  Canóvanas
+                </span>
+                <span class="px-3 py-1.5 bg-main border border-border-std rounded-full text-xs text-gray-300">
+                  Río Grande
+                </span>
+                <span class="bg-blue-600 border border-blue-500 text-white rounded-full px-3 py-1.5 text-xs">
+                  <span class="lang-es">Área Metro PR</span>
+                  <span class="lang-en">PR Metro Area</span>
+                </span>
+              </div>
+
+              <div class="border-l-2 border-secondary pl-4 py-1 mb-8 md:mb-0">
+                <p class="text-xs text-gray-400">
+                  <span class="lang-es">
+                    La ubicación exacta se comparte al momento de coordinar el
+                    servicio.
+                  </span>
+                  <span class="lang-en">
+                    The exact location is shared when coordinating the service.
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Card: Map -->
+          <div class="lg:col-span-7 glass-card rounded-lg p-8 flex flex-col" id="mapa-cobertura">
+            <div class="relative w-full flex-grow flex items-center justify-center min-h-[250px] md:min-h-[350px] border border-gray-400/40 rounded-xl bg-gradient-to-br from-[#1a1a1a] to-[#050505] overflow-hidden mb-6 shadow-[0_0_25px_rgba(255,255,255,0.05)] group">
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.08),_transparent_60%)] pointer-events-none transition-opacity duration-500 group-hover:opacity-100 opacity-70"></div>
+
+              <!-- Placeholder image (replace src when ready) -->
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/153d0ad9-4c7d-41b2-879f-542e7b25490b_800w.png" alt="Mapa de cobertura de Autocerrajería SOS en el área metro de Puerto Rico" class="opacity-100 w-full h-full object-contain md:object-cover absolute top-0 right-0 bottom-0 left-0" loading="lazy">
+
+              <div class="absolute top-4 right-4 bg-main/90 backdrop-blur-md border border-border-std px-3 py-1.5 rounded-md shadow-lg flex items-center gap-2 z-20">
+                <div class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-glow"></div>
+                <span class="text-[10px] text-white font-bold tracking-widest uppercase">
+                  Área Metro PR
+                </span>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-2 text-[10px] md:text-[11px] text-gray-400 font-semibold uppercase tracking-wider bg-alt/60 backdrop-blur-md py-4 px-4 rounded-lg border border-border-std shadow-lg">
+              <span class="flex items-center gap-1.5 text-white">
+                <span class="w-1.5 h-1.5 bg-secondary rounded-full shadow-glow-blue"></span>
+                San Juan
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Carolina
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Bayamón
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Cataño
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Guaynabo
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Trujillo Alto
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Canóvanas
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Río Grande
+              </span>
+              <span class="text-border-std hidden md:inline">•</span>
+              <span class="flex items-center gap-1.5 hover:text-white transition-colors">
+                <span class="w-1.5 h-1.5 bg-secondary/70 rounded-full"></span>
+                Loíza
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mid-page CTA -->
+      <section class="py-16 bg-gradient-to-b from-main to-alt border-y border-border-std mb-24 text-center">
+        <div class="max-w-[800px] mx-auto px-4">
+          <span class="lang-es">
+            Comunícate con Autocerrajería SOS para evaluar tu caso, confirmar
+            compatibilidad y agendar una cita en el área metro.
+          </span>
+          <span class="lang-en">
+            Contact Autocerrajería SOS to evaluate your case, confirm
+            compatibility, and schedule an appointment in the metro area.
+          </span>
+        </div>
+      </section>
+      <section id="servicios" class="max-w-[1280px] mx-auto px-4 lg:px-8 mb-24">
+        <div class="relative text-center mb-12 md:mb-16 flex flex-col items-center py-12 md:py-16 px-4 md:px-8 rounded-2xl overflow-hidden bg-main border border-border-std shadow-2xl">
+          <!-- Background Image -->
+          <div class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_3840w.png" alt="" class="w-full h-full object-cover object-[center_60%] opacity-[0.06] md:opacity-[0.12] scale-110">
+          </div>
+          <!-- Overlays -->
+          <div class="absolute inset-0 z-0 bg-black/80 md:bg-black/60 pointer-events-none"></div>
+          <div class="absolute inset-0 z-0 bg-gradient-to-b from-main via-transparent to-main pointer-events-none"></div>
+
+          <!-- Content -->
+          <div class="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center">
+            <div class="text-xs md:text-sm text-secondary font-bold uppercase tracking-[0.2em] md:tracking-[0.25em]">
+              <span class="text-xs md:text-sm text-primary font-bold uppercase tracking-[0.2em] md:tracking-[0.25em]">
+                <span class="lang-en">Specialized Services</span>
+              </span>
+            </div>
+            <h2 class="font-heading text-4xl md:text-5xl lg:text-6xl tracking-tight font-medium text-white uppercase mb-6 drop-shadow-md">
+              <span class="lang-es">
+                Servicios especializados de cerrajería automotriz
+              </span>
+              <span class="lang-en">
+                Specialized Automotive Locksmith Services
+              </span>
+            </h2>
+            <p class="text-sm md:text-base text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+              <span class="lang-es">
+                Programación, duplicado, corte y asistencia móvil para llaves
+                automotrices en Puerto Rico.
+              </span>
+              <span class="lang-en">
+                Programming, duplication, cutting, and mobile assistance for
+                automotive keys in Puerto Rico.
+              </span>
+            </p>
+            <p class="text-[11px] md:text-xs text-gray-500 font-medium uppercase tracking-[0.15em] md:tracking-[0.2em] border-t border-border-std pt-5 inline-block">
+              <span class="lang-es">
+                Cotización personalizada según vehículo, año y tipo de llave.
+              </span>
+              <span class="lang-en">
+                Personalized quotes based on vehicle, year, and key type.
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="glass-card flex flex-col rounded-lg overflow-hidden group hover:border-gray-500/50 transition-colors h-full">
+            <div class="relative w-full h-[150px] md:h-[200px] overflow-hidden shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/720e3c7e-17bf-4b51-b9fe-31f4e76e88b7_3840w.png" alt="Programación de llave con chip para vehículo en Puerto Rico" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent opacity-90"></div>
+              <div class="absolute bottom-4 left-4 w-10 h-10 rounded-lg bg-alt/80 backdrop-blur border border-border-std flex items-center justify-center group-hover:bg-secondary/10 group-hover:border-secondary/30 transition-colors">
+                <iconify-icon icon="solar:key-square-linear" class="text-white group-hover:text-secondary text-xl transition-colors"></iconify-icon>
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-lg font-bold text-white mb-2">
+                <span class="lang-es">Programación con chip</span>
+                <span class="lang-en">Chip key programming</span>
+              </h3>
+              <p class="text-xs text-gray-400 mb-6 flex-grow">
+                <span class="lang-es">
+                  Programación y configuración de llaves con transponder para
+                  encendido seguro.
+                </span>
+                <span class="lang-en">
+                  Programming and configuration of transponder keys for secure
+                  ignition.
+                </span>
+              </p>
+              <div class="flex gap-2 w-full mt-auto">
+                <a href="tel:7872011050" class="flex-1 text-center py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                  <iconify-icon icon="solar:phone-bold" width="16"></iconify-icon>
+                  <span class="lang-es">Llamar</span>
+                  <span class="lang-en">Call</span>
+                </a>
+                <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20programaci%C3%B3n%20de%20llave%20con%20chip.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o." target="_blank" class="flex-1 text-center py-2.5 bg-transparent border border-[#25D366] hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1" rel="noopener noreferrer">
+                  <iconify-icon icon="ic:baseline-whatsapp" width="16"></iconify-icon>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card flex flex-col rounded-lg overflow-hidden group hover:border-gray-500/50 transition-colors h-full">
+            <div class="relative w-full h-[150px] md:h-[200px] overflow-hidden shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0ebac0a8-710c-45d1-90c4-fca8a5916cc3_3840w.png" alt="Smart key y equipo de programación automotriz" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent opacity-90"></div>
+              <div class="absolute bottom-4 left-4 w-10 h-10 rounded-lg bg-alt/80 backdrop-blur border border-border-std flex items-center justify-center group-hover:bg-secondary/10 group-hover:border-secondary/30 transition-colors">
+                <iconify-icon icon="solar:cpu-bolt-linear" class="text-white group-hover:text-secondary text-xl transition-colors"></iconify-icon>
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-lg font-bold text-white mb-2">
+                <span class="lang-es">Programación de smart keys</span>
+                <span class="lang-en">Smart key programming</span>
+              </h3>
+              <p class="text-xs text-gray-400 mb-6 flex-grow">
+                <span class="lang-es">
+                  Configuración de llaves inteligentes (push-to-start) para
+                  vehículos modernos sin contacto.
+                </span>
+                <span class="lang-en">
+                  Configuration of smart keys (push-to-start) for modern
+                  vehicles.
+                </span>
+              </p>
+              <div class="flex gap-2 w-full mt-auto">
+                <a href="tel:7872011050" class="flex-1 text-center py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                  <iconify-icon icon="solar:phone-bold" width="16"></iconify-icon>
+                  <span class="lang-es">Llamar</span>
+                  <span class="lang-en">Call</span>
+                </a>
+                <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20programaci%C3%B3n%20de%20smart%20key.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o." target="_blank" class="flex-1 text-center py-2.5 bg-transparent border border-[#25D366] hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1" rel="noopener noreferrer">
+                  <iconify-icon icon="ic:baseline-whatsapp" width="16"></iconify-icon>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card flex flex-col rounded-lg overflow-hidden group hover:border-gray-500/50 transition-colors h-full">
+            <div class="relative w-full h-[150px] md:h-[200px] overflow-hidden shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/39203d91-511d-4837-bf6f-37ff272a4fb8_3840w.png" alt="Creación de llaves perdidas de carro en Puerto Rico" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent opacity-90"></div>
+              <div class="absolute bottom-4 left-4 w-10 h-10 rounded-lg bg-alt/80 backdrop-blur border border-border-std flex items-center justify-center group-hover:bg-secondary/10 group-hover:border-secondary/30 transition-colors">
+                <iconify-icon icon="solar:shield-warning-linear" class="text-white group-hover:text-secondary text-xl transition-colors"></iconify-icon>
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-lg font-bold text-white mb-2">
+                <span class="lang-es">Todas las llaves perdidas</span>
+                <span class="lang-en">All keys lost</span>
+              </h3>
+              <p class="text-xs text-gray-400 mb-6 flex-grow">
+                <span class="lang-es">
+                  Creación y programación de llaves desde cero para vehículos
+                  sin ninguna llave existente.
+                </span>
+                <span class="lang-en">
+                  Creation and programming of keys from scratch for vehicles
+                  with no keys.
+                </span>
+              </p>
+              <div class="flex gap-2 w-full mt-auto">
+                <a href="tel:7872011050" class="flex-1 text-center py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                  <iconify-icon icon="solar:phone-bold" width="16"></iconify-icon>
+                  <span class="lang-es">Llamar</span>
+                  <span class="lang-en">Call</span>
+                </a>
+                <a href="https://wa.me/17872011050?text=Hola%2C%20perd%C3%AD%20todas%20las%20llaves%20de%20mi%20veh%C3%ADculo%20y%20necesito%20una%20cotizaci%C3%B3n.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o." target="_blank" class="flex-1 text-center py-2.5 bg-transparent border border-[#25D366] hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1" rel="noopener noreferrer">
+                  <iconify-icon icon="ic:baseline-whatsapp" width="16"></iconify-icon>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card flex flex-col rounded-lg overflow-hidden group hover:border-gray-500/50 transition-colors h-full">
+            <div class="relative w-full h-[150px] md:h-[200px] overflow-hidden shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1708cd05-0523-4018-868a-1244747f660d_3840w.png" alt="Duplicado de llaves automotrices" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent opacity-90"></div>
+              <div class="absolute bottom-4 left-4 w-10 h-10 rounded-lg bg-alt/80 backdrop-blur border border-border-std flex items-center justify-center group-hover:bg-secondary/10 group-hover:border-secondary/30 transition-colors">
+                <iconify-icon icon="solar:copy-linear" class="text-white group-hover:text-secondary text-xl transition-colors"></iconify-icon>
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-lg font-bold text-white mb-2">
+                <span class="lang-es">Duplicado de llaves</span>
+                <span class="lang-en">Key duplication</span>
+              </h3>
+              <p class="text-xs text-gray-400 mb-6 flex-grow">
+                <span class="lang-es">
+                  Servicio de copia y duplicado de llaves automotrices con o sin
+                  chip para respaldo seguro.
+                </span>
+                <span class="lang-en">
+                  Copy and duplication service for automotive keys with or
+                  without a chip.
+                </span>
+              </p>
+              <div class="flex gap-2 w-full mt-auto">
+                <a href="tel:7872011050" class="flex-1 text-center py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                  <iconify-icon icon="solar:phone-bold" width="16"></iconify-icon>
+                  <span class="lang-es">Llamar</span>
+                  <span class="lang-en">Call</span>
+                </a>
+                <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20duplicado%20de%20llave%20automotriz.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o." target="_blank" class="flex-1 text-center py-2.5 bg-transparent border border-[#25D366] hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1" rel="noopener noreferrer">
+                  <iconify-icon icon="ic:baseline-whatsapp" width="16"></iconify-icon>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card flex flex-col rounded-lg overflow-hidden group hover:border-gray-500/50 transition-colors h-full">
+            <div class="relative w-full h-[150px] md:h-[200px] overflow-hidden shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3ddeab17-58af-46b0-bdd5-8d8f342f3a42_3840w.png" alt="Corte de llave automotriz con maquinaria especializada" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent opacity-90"></div>
+              <div class="absolute bottom-4 left-4 w-10 h-10 rounded-lg bg-alt/80 backdrop-blur border border-border-std flex items-center justify-center group-hover:bg-secondary/10 group-hover:border-secondary/30 transition-colors">
+                <iconify-icon icon="solar:scissors-square-linear" class="text-white group-hover:text-secondary text-xl transition-colors"></iconify-icon>
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-lg font-bold text-white mb-2">
+                <span class="lang-es">Corte de llaves</span>
+                <span class="lang-en">Automotive key cutting</span>
+              </h3>
+              <p class="text-xs text-gray-400 mb-6 flex-grow">
+                <span class="lang-es">
+                  Corte de llaves de autos con precisión y exactitud utilizando
+                  maquinaria especializada.
+                </span>
+                <span class="lang-en">
+                  Precise automotive key cutting using specialized machinery.
+                </span>
+              </p>
+              <div class="flex gap-2 w-full mt-auto">
+                <a href="tel:7872011050" class="flex-1 text-center py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                  <iconify-icon icon="solar:phone-bold" width="16"></iconify-icon>
+                  <span class="lang-es">Llamar</span>
+                  <span class="lang-en">Call</span>
+                </a>
+                <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20corte%20de%20llave%20automotriz.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o." target="_blank" class="flex-1 text-center py-2.5 bg-transparent border border-[#25D366] hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1" rel="noopener noreferrer">
+                  <iconify-icon icon="ic:baseline-whatsapp" width="16"></iconify-icon>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card flex flex-col rounded-lg overflow-hidden group hover:border-gray-500/50 transition-colors h-full">
+            <div class="relative w-full h-[150px] md:h-[200px] overflow-hidden shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dcdcab7a-79a4-4f9e-9aea-484e97b43f12_3840w.png" alt="Apertura de vehículo por cerrajero automotriz móvil" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent opacity-90"></div>
+              <div class="absolute bottom-4 left-4 w-10 h-10 rounded-lg bg-alt/80 backdrop-blur border border-border-std flex items-center justify-center group-hover:bg-secondary/10 group-hover:border-secondary/30 transition-colors">
+                <iconify-icon icon="solar:lock-unlocked-linear" class="text-white group-hover:text-secondary text-xl transition-colors"></iconify-icon>
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-lg font-bold text-white mb-2">
+                <span class="lang-es">Apertura de vehículos</span>
+                <span class="lang-en">Vehicle lockout service</span>
+              </h3>
+              <p class="text-xs text-gray-400 mb-6 flex-grow">
+                <span class="lang-es">
+                  Servicio de apertura sin daño para vehículos bloqueados con
+                  llaves adentro o inaccesibles.
+                </span>
+                <span class="lang-en">
+                  Damage-free unlocking service for vehicles locked with keys
+                  inside.
+                </span>
+              </p>
+              <div class="flex gap-2 w-full mt-auto">
+                <a href="tel:7872011050" class="flex-1 text-center py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                  <iconify-icon icon="solar:phone-bold" width="16"></iconify-icon>
+                  <span class="lang-es">Llamar</span>
+                  <span class="lang-en">Call</span>
+                </a>
+                <a href="https://wa.me/17872011050?text=Hola%2C%20necesito%20asistencia%20para%20apertura%20de%20veh%C3%ADculo.%20Dej%C3%A9%20las%20llaves%20dentro%20o%20no%20puedo%20acceder%20al%20veh%C3%ADculo.%20Mi%20ubicaci%C3%B3n%20aproximada%20es%3A" target="_blank" class="flex-1 text-center py-2.5 bg-transparent border border-[#25D366] hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1" rel="noopener noreferrer">
+                  <iconify-icon icon="ic:baseline-whatsapp" width="16"></iconify-icon>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card flex flex-col rounded-lg overflow-hidden group hover:border-primary/50 transition-colors h-full">
+            <div class="relative w-full h-[150px] md:h-[200px] overflow-hidden shrink-0">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6aa97fb0-a234-48aa-a7ac-3bf125b6f389_3840w.png" alt="Reemplazo de controles y key fobs automotrices" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent opacity-90"></div>
+              <div class="absolute bottom-4 left-4 w-10 h-10 rounded-lg bg-alt/80 backdrop-blur border border-border-std flex items-center justify-center group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors">
+                <iconify-icon icon="solar:bolt-circle-linear" class="text-white group-hover:text-primary text-xl transition-colors"></iconify-icon>
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-lg font-bold text-white mb-2">
+                <span class="lang-es">Reemplazo de controles</span>
+                <span class="lang-en">Remote &amp; fob replacement</span>
+              </h3>
+              <p class="text-xs text-gray-400 mb-6 flex-grow">
+                <span class="lang-es">
+                  Sustitución y programación de controles remotos, beepers y
+                  fobs automotrices.
+                </span>
+                <span class="lang-en">
+                  Replacement and programming of automotive remote controls and
+                  key fobs.
+                </span>
+              </p>
+              <div class="flex gap-2 w-full mt-auto">
+                <a href="tel:7872011050" class="flex-1 text-center py-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+                  <iconify-icon icon="solar:phone-bold" width="16"></iconify-icon>
+                  <span class="lang-es">Llamar</span>
+                  <span class="lang-en">Call</span>
+                </a>
+                <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20reemplazo%20o%20programaci%C3%B3n%20de%20control%20remoto%20%2F%20key%20fob.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o." target="_blank" class="flex-1 text-center py-2.5 bg-transparent border border-[#25D366] hover:bg-[#25D366] text-[#25D366] hover:text-white rounded-md text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1" rel="noopener noreferrer">
+                  <iconify-icon icon="ic:baseline-whatsapp" width="16"></iconify-icon>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Proceso -->
+      <section id="proceso" class="py-16 bg-gradient-to-b from-main via-[#111] to-main border-y border-border-std mb-24">
+        <div class="max-w-[800px] mx-auto px-4">
+          <iconify-icon icon="solar:car-bold-duotone" class="text-secondary text-5xl mb-4"></iconify-icon>
+          <h2 class="font-heading text-3xl md:text-5xl tracking-tight font-medium text-white uppercase mb-6">
+            <span class="lang-es">
+              Servicio para múltiples marcas y modelos
+            </span>
+            <span class="lang-en">Service for multiple makes and models</span>
+          </h2>
+          <p class="text-sm text-gray-400 mb-8 max-w-lg mx-auto">
+            <span class="lang-es">
+              Trabajamos con programación y reemplazo de llaves automotrices
+              para múltiples marcas. La compatibilidad se valida al momento de
+              la cotización.
+            </span>
+            <span class="lang-en">
+              We work with automotive key programming and replacement for
+              multiple brands. Compatibility is verified at the time of quoting.
+            </span>
+          </p>
+          <div class="flex flex-wrap justify-center gap-3 bg-transparent text-gray-300 rounded-md text-xs font-bold uppercase tracking-widest">
+            <span class="px-4 py-2 bg-alt border border-border-std rounded-md text-xs font-bold text-gray-300 uppercase tracking-widest">
+              Toyota
+            </span>
+            <span class="px-4 py-2 bg-alt border border-border-std rounded-md text-xs font-bold text-gray-300 uppercase tracking-widest">
+              Hyundai
+            </span>
+            <span class="px-4 py-2 bg-alt border border-border-std rounded-md text-xs font-bold text-gray-300 uppercase tracking-widest">
+              Honda
+            </span>
+            <span class="px-4 py-2 bg-alt border border-border-std rounded-md text-xs font-bold text-gray-300 uppercase tracking-widest">
+              Ford
+            </span>
+            <span class="px-4 py-2 bg-alt border border-border-std rounded-md text-xs font-bold text-gray-300 uppercase tracking-widest">
+              Kia
+            </span>
+            <span class="px-4 py-2 bg-alt border border-border-std rounded-md text-xs font-bold text-gray-300 uppercase tracking-widest">
+              Nissan
+            </span>
+            <span class="px-4 py-2 bg-transparent text-secondary rounded-md text-xs font-bold uppercase tracking-widest">
+              <span class="lang-es">+ Y otras marcas</span>
+              <span class="lang-en">+ And other brands</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing & Estimator (3-Column Layout) -->
+      <section id="contacto" class="max-w-[1280px] mx-auto px-4 lg:px-8 mb-24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <!-- Info Contacto -->
+          <div class="">
+            <h2 class="font-heading text-4xl tracking-tight font-medium text-white uppercase mb-4">
+              <span class="lang-es">
+                ¿Necesitas una llave, programación o acceso a tu vehículo?
+              </span>
+              <span class="lang-en">
+                Need a key, programming, or access to your vehicle?
+              </span>
+            </h2>
+            <p class="text-sm text-gray-400 mb-8">
+              <span class="lang-es">
+                Comunícate con Autocerrajería SOS para una cotización
+                personalizada según tu vehículo, año y tipo de llave.
+              </span>
+              <span class="lang-en">
+                Contact Autocerrajería SOS for a customized quote based on your
+                vehicle, year, and key type.
+              </span>
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 mb-10">
+              <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white flex-1 py-4 rounded-std text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
+                <iconify-icon icon="solar:phone-bold" width="20"></iconify-icon>
+                <span class="lang-es">Llamar Ahora</span>
+                <span class="lang-en">Call Now</span>
+              </a>
+              <a href="https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20un%20servicio%20de%20autocerrajer%C3%ADa." target="_blank" class="bg-transparent border border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white flex-1 py-4 rounded-std text-sm font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-2" rel="noopener noreferrer">
+                <iconify-icon icon="ic:baseline-whatsapp" width="20"></iconify-icon>
+                WhatsApp
+              </a>
+            </div>
+
+            <ul class="space-y-4">
+              <li class="flex items-center gap-4 text-sm">(787) 201-1050</li>
+              <li class="flex gap-4 text-sm gap-x-4 gap-y-4 items-center">
+                <div class="w-10 h-10 rounded-full bg-alt border border-border-std flex items-center justify-center text-secondary">
+                  <iconify-icon icon="solar:letter-bold" width="20"></iconify-icon>
+                </div>
+                <div class="">
+                  <span class="block text-xs text-gray-500 uppercase">
+                    <span class="lang-es">Correo Electrónico</span>
+                    <span class="lang-en">Email</span>
+                  </span>
+                  <span class="text-white font-normal">
+                    autocerrajeriasos@gmail.com
+                  </span>
+                </div>
+              </li>
+              <li class="flex items-center gap-4 text-sm">
+                <div class="w-10 h-10 rounded-full bg-alt border border-border-std flex items-center justify-center text-secondary">
+                  <iconify-icon icon="solar:clock-circle-bold"></iconify-icon>
+                </div>
+                <div class="">
+                  <span class="block text-xs text-gray-500 uppercase">
+                    <span class="lang-es">Horario</span>
+                    <span class="lang-en">Hours</span>
+                  </span>
+                  <span class="text-white font-medium">
+                    <span class="lang-es">
+                      Lunes a sábado desde las 7:00 AM
+                    </span>
+                    <span class="lang-en">Mon-Sat from 7:00 AM</span>
+                  </span>
+                </div>
+              </li>
+              <li class="flex items-center gap-4 text-sm">
+                <div class="w-10 h-10 rounded-full bg-alt border border-border-std flex items-center justify-center text-secondary">
+                  <iconify-icon icon="solar:map-point-bold"></iconify-icon>
+                </div>
+                <div class="">
+                  <span class="block text-xs text-gray-500 uppercase">
+                    <span class="lang-es">Ubicación</span>
+                    <span class="lang-en">Location</span>
+                  </span>
+                  <span class="text-white font-medium">
+                    <span class="lang-es">
+                      Servicio 100% móvil a domicilio (Cita previa)
+                    </span>
+                    <span class="lang-en">
+                      100% Mobile service to your door (By appointment)
+                    </span>
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Formulario -->
+
+          <div class="glass-card p-6 md:p-8 rounded-lg shadow-2xl border border-border-std relative overflow-hidden bg-alt/80 backdrop-blur-xl">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-blue-400"></div>
+            <h2 id="solicitar-cotizacion" class="font-heading text-2xl md:text-3xl text-white uppercase tracking-tight mb-2">
+              <span class="lang-es">Solicitar cotización</span>
+              <span class="lang-en">Request a Quote</span>
+            </h2>
+            <p class="text-xs text-gray-400 mb-6">
+              <span class="lang-es">
+                Completa la información de tu vehículo y nos comunicaremos
+                contigo lo antes posible.
+              </span>
+              <span class="lang-en">
+                Fill out your vehicle information and we will contact you as
+                soon as possible.
+              </span>
+            </p>
+            <form action="https://formsubmit.co/autocerrajeriasos@gmail.com" method="POST" class="space-y-4" data-aura-form="true">
+              <input type="hidden" name="_subject" value="Nueva Solicitud de Cotización - Autocerrajería SOS">
+              <input type="hidden" name="_captcha" value="false">
+              <input type="hidden" name="_template" value="table">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                    <span class="lang-es">Nombre</span>
+                    <span class="lang-en">Name</span>
+                    *
+                  </label>
+                  <input type="text" name="Nombre" required="" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors">
+                </div>
+                <div>
+                  <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                    <span class="lang-es">Teléfono</span>
+                    <span class="lang-en">Phone</span>
+                    *
+                  </label>
+                  <input type="tel" name="Teléfono" required="" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors">
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                  <span class="lang-es">Email (Opcional)</span>
+                  <span class="lang-en">Email (Optional)</span>
+                </label>
+                <input type="email" name="Email" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors">
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                    <span class="lang-es">Marca</span>
+                    <span class="lang-en">Make</span>
+                    *
+                  </label>
+                  <input type="text" name="Marca" required="" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors">
+                </div>
+                <div>
+                  <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                    <span class="lang-es">Modelo</span>
+                    <span class="lang-en">Model</span>
+                    *
+                  </label>
+                  <input type="text" name="Modelo" required="" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors">
+                </div>
+                <div>
+                  <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                    <span class="lang-es">Año</span>
+                    <span class="lang-en">Year</span>
+                    *
+                  </label>
+                  <input type="text" name="Año" required="" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors">
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                  <span class="lang-es">Servicio Requerido</span>
+                  <span class="lang-en">Service Required</span>
+                  *
+                </label>
+                <div class="relative">
+                  <select name="Servicio" required="" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors appearance-none pr-8">
+                    <option value="" disabled="" selected="" class="text-gray-500">
+                      -- Selecciona un servicio --
+                    </option>
+                    <option value="Programación de llaves con chip">
+                      Programación de llaves con chip
+                    </option>
+                    <option value="Programación de smart keys">
+                      Programación de smart keys
+                    </option>
+                    <option value="Todas las llaves perdidas">
+                      Todas las llaves perdidas
+                    </option>
+                    <option value="Duplicado de llaves">
+                      Duplicado de llaves
+                    </option>
+                    <option value="Corte de llaves automotrices">
+                      Corte de llaves automotrices
+                    </option>
+                    <option value="Apertura de vehículos">
+                      Apertura de vehículos
+                    </option>
+                    <option value="Reemplazo de controles y remotos">
+                      Reemplazo de controles y remotos
+                    </option>
+                    <option value="Otro servicio">Otro servicio</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">
+                  <span class="lang-es">Mensaje Adicional</span>
+                  <span class="lang-en">Additional Message</span>
+                </label>
+                <textarea name="Mensaje" rows="3" class="w-full bg-deep border border-border-std rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors resize-none"></textarea>
+              </div>
+              <button type="submit" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-3 rounded-md text-sm font-bold uppercase tracking-widest transition-colors shadow-[0_0_15px_rgba(37,211,102,0.4)] mt-4">
+                <span class="lang-es">Enviar Solicitud</span>
+                <span class="lang-en">Submit Request</span>
+              </button>
+              <div class="hidden form-success-message bg-green-500/10 border border-green-500/50 text-green-400 p-4 rounded-md text-sm mt-4 animate-pulse flex items-start gap-3">
+                <iconify-icon icon="solar:check-circle-bold" class="text-xl mt-0.5 shrink-0"></iconify-icon>
+                <div>
+                  <span class="lang-es font-medium block mb-1">
+                    ¡Solicitud enviada correctamente!
+                  </span>
+                  <span class="lang-es text-xs opacity-80">
+                    Gracias por contactarnos. Nos comunicaremos contigo lo antes
+                    posible.
+                  </span>
+                  <span class="lang-en font-medium block mb-1">
+                    Request sent successfully!
+                  </span>
+                  <span class="lang-en text-xs opacity-80">
+                    Thank you for contacting us. We will get back to you as soon
+                    as possible.
+                  </span>
+                </div>
+              </div>
+              <div class="hidden form-error-message bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-md text-sm mt-4 flex items-start gap-3">
+                The request could not be sent. Please call directly at (787)
+                201-1050.
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Area / Badges -->
+    <section id="faq" class="max-w-[800px] mx-auto px-4 lg:px-8 mb-24">
+      <div class="text-center mb-12">
+        <h2 class="font-heading text-3xl md:text-5xl tracking-tight font-medium text-white uppercase mb-4">
+          <span class="lang-es">Preguntas frecuentes</span>
+          <span class="lang-en">Frequently Asked Questions</span>
+        </h2>
+        <p class="text-sm text-gray-400">
+          <span class="lang-es">
+            Información rápida para ayudarte a coordinar tu servicio de
+            autocerrajería móvil.
+          </span>
+          <span class="lang-en">
+            Quick information to help you coordinate your mobile automotive
+            locksmith service.
+          </span>
+        </p>
+      </div>
+      <div class="space-y-4">
+        <div class="glass-card p-6 rounded-lg border border-border-std">
+          <h3 class="text-white font-bold text-lg mb-2">
+            <span class="lang-es">1. ¿Ofrecen servicio a domicilio?</span>
+            <span class="lang-en">1. Do you offer mobile service?</span>
+          </h3>
+          <p class="text-gray-300 text-sm">
+            <span class="lang-es">
+              Sí. Autocerrajería SOS ofrece servicio móvil por cita y
+              disponibilidad en gran parte del área metro de Puerto Rico.
+            </span>
+            <span class="lang-en">
+              Yes. Autocerrajería SOS offers mobile service by appointment and
+              availability across much of the PR metro area.
+            </span>
+          </p>
+        </div>
+        <div class="glass-card p-6 rounded-lg border border-border-std">
+          <h3 class="text-white font-bold text-lg mb-2">
+            <span class="lang-es">2. ¿En qué áreas brindan servicio?</span>
+            <span class="lang-en">
+              2. In what areas do you provide service?
+            </span>
+          </h3>
+          <p class="text-gray-300 text-sm">
+            <span class="lang-es">
+              Trabajamos principalmente en San Juan, Carolina, Bayamón, Cataño,
+              Guaynabo, Trujillo Alto, Canóvanas, Río Grande y áreas cercanas
+              del área metro.
+            </span>
+            <span class="lang-en">
+              We mainly work in San Juan, Carolina, Bayamón, Cataño, Guaynabo,
+              Trujillo Alto, Canóvanas, Río Grande, and nearby metro areas.
+            </span>
+          </p>
+        </div>
+        <div class="glass-card p-6 rounded-lg border border-border-std">
+          <h3 class="text-white font-bold text-lg mb-2">
+            <span class="lang-es">
+              3. ¿Pueden ayudar si perdí todas las llaves de mi vehículo?
+            </span>
+            <span class="lang-en">
+              3. Can you help if I lost all my vehicle keys?
+            </span>
+          </h3>
+          <p class="text-gray-300 text-sm">
+            <span class="lang-es">
+              Sí. Ofrecemos servicio de todas las llaves perdidas, incluyendo
+              creación y programación de llaves desde cero según el vehículo.
+            </span>
+            <span class="lang-en">
+              Yes. We offer an all-keys-lost service, including creation and
+              programming of keys from scratch depending on the vehicle.
+            </span>
+          </p>
+        </div>
+        <div class="glass-card p-6 rounded-lg border border-border-std">
+          <h3 class="text-white font-bold text-lg mb-2">
+            <span class="lang-es">
+              4. ¿Programan smart keys y llaves con chip?
+            </span>
+            <span class="lang-en">
+              4. Do you program smart keys and chip keys?
+            </span>
+          </h3>
+          <p class="text-gray-300 text-sm">
+            <span class="lang-es">
+              Sí. Trabajamos programación de smart keys, controles proximity y
+              llaves con chip para múltiples marcas y modelos compatibles.
+            </span>
+            <span class="lang-en">
+              Yes. We program smart keys, proximity remotes, and chip keys for
+              multiple compatible makes and models.
+            </span>
+          </p>
+        </div>
+        <div class="glass-card p-6 rounded-lg border border-border-std">
+          <h3 class="text-white font-bold text-lg mb-2">
+            <span class="lang-es">
+              5. ¿Qué información necesito para una cotización?
+            </span>
+            <span class="lang-en">
+              5. What information do I need for a quote?
+            </span>
+          </h3>
+          <p class="text-gray-300 text-sm">
+            <span class="lang-es">
+              Para una cotización más rápida, comparte la marca, modelo, año del
+              vehículo, tipo de llave o servicio requerido y tu ubicación
+              aproximada.
+            </span>
+            <span class="lang-en">
+              For a faster quote, share the make, model, year of the vehicle,
+              type of key or required service, and your approximate location.
+            </span>
+          </p>
+        </div>
+        <div class="glass-card p-6 rounded-lg border border-border-std">
+          <h3 class="text-white font-bold text-lg mb-2">
+            <span class="lang-es">
+              6. ¿Muestran precios fijos en la página?
+            </span>
+            <span class="lang-en">
+              6. Do you show fixed prices on the website?
+            </span>
+          </h3>
+          <p class="text-gray-300 text-sm">
+            <span class="lang-es">
+              No. Las cotizaciones son personalizadas según el vehículo, año,
+              tipo de llave y servicio necesario.
+            </span>
+            <span class="lang-en">
+              No. Quotes are personalized based on the vehicle, year, key type,
+              and required service.
+            </span>
+          </p>
+        </div>
+        <div class="glass-card p-6 rounded-lg border border-border-std">
+          You can call (787) 201-1050 directly, write via WhatsApp, or fill out
+          the quote form on the website.
+        </div>
+      </div>
+    </section>
+    <footer class="border-border-std border-t pt-16 pb-28 md:pb-8 relative z-10 bg-main md:bg-transparent">
+      <div class="max-w-[1280px] mx-auto px-6 lg:px-8 w-full">
+        <!-- 6-Column Badge Grid -->
+
+        <!-- Standard Footer Bottom -->
+
+        <div class="flex flex-col md:flex-row text-[10px] text-gray-500 text-left gap-x-4 gap-y-10 md:gap-y-4 items-start md:items-center justify-between w-full">
+          <div class="col-span-1 md:col-span-2">
+            <a href="index.html" class="flex items-center gap-3 mb-6 hover:opacity-90 transition-opacity">
+              <div class="w-[45px] md:w-[55px] h-[45px] md:h-[55px] flex items-center justify-center bg-gradient-to-br from-[#2a2a2a] to-[#0a0a0a] rounded-md border border-gray-500/40 shadow-[0_0_12px_rgba(255,255,255,0.05)] shrink-0 p-1.5 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.1),transparent)] pointer-events-none"></div>
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_320w.png" alt="Autocerrajería SOS Logo" class="w-full h-full object-contain relative z-10">
+              </div>
+              <div class="text-[9px] md:text-[11px] tracking-[0.25em] text-gray-400 font-bold uppercase mt-1.5">
+                <span class="font-brand text-[19px] md:text-[25px] tracking-[0.08em] text-gray-100 uppercase leading-none">
+                  Autocerrajería
+                  <span class="text-primary">SOS</span>
+                </span>
+                <span class="text-[9px] md:text-[11px] tracking-[0.25em] text-primary font-bold uppercase mt-1.5">
+                  <span class="lang-es">Tecnología &amp; Precisión</span>
+                  <span class="lang-en">Technology &amp; Precision</span>
+                </span>
+              </div>
+            </a>
+            <p class="text-xs text-gray-400 max-w-sm mb-4">
+              <span class="lang-es">
+                Tecnología, precisión y acceso cuando más lo necesitas. Servicio
+                móvil especializado en llaves y programación automotriz en
+                Puerto Rico.
+              </span>
+              <span class="lang-en">
+                Technology, precision, and access when you need it most.
+                Specialized mobile service for automotive keys and programming
+                in Puerto Rico.
+              </span>
+            </p>
+          </div>
+
+          <div class="">
+            <h4 class="text-sm font-medium text-white uppercase tracking-wider mb-4">
+              <span class="lang-es">Enlaces Rápidos</span>
+              <span class="lang-en">Quick Links</span>
+            </h4>
+            <ul class="space-y-2 text-xs text-gray-400">
+              <li class="">
+                <a href="#" class="hover:text-white transition-colors">
+                  <span class="lang-es">Inicio</span>
+                  <span class="lang-en">Home</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="#servicios" class="hover:text-white transition-colors">
+                  <span class="lang-es">Servicios</span>
+                  <span class="lang-en">Services</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="#proceso" class="hover:text-white transition-colors">
+                  <span class="lang-es">Proceso</span>
+                  <span class="lang-en">Process</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="#areas" class="hover:text-white transition-colors">
+                  <span class="lang-es">Áreas</span>
+                  <span class="lang-en">Areas</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="#contacto" class="hover:text-white transition-colors">
+                  <span class="lang-es">Contacto</span>
+                  <span class="lang-en">Contact</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="">
+            <h4 class="text-sm font-medium text-white uppercase tracking-wider mb-4">
+              <span class="lang-es">Contacto</span>
+              <span class="lang-en">Contact</span>
+            </h4>
+            <ul class="space-y-3 text-xs text-gray-400">
+              <li class="flex items-start gap-2">
+                <iconify-icon icon="solar:phone-linear" class="text-secondary mt-0.5" width="14"></iconify-icon>
+                <a href="tel:7872011050" class="hover:text-white transition-colors">
+                  (787) 201-1050
+                </a>
+              </li>
+              <li class="flex items-start gap-2">
+                <iconify-icon icon="ic:baseline-whatsapp" class="text-[#25D366] mt-0.5" width="14"></iconify-icon>
+                <a href="https://wa.me/17872011050" target="_blank" class="hover:text-[#25D366] transition-colors">
+                  (787) 201-1050
+                </a>
+              </li>
+              <li class="flex items-start gap-2">
+                <iconify-icon icon="solar:letter-linear" class="text-secondary mt-0.5" width="14"></iconify-icon>
+                <a href="mailto:autocerrajeriasos@gmail.com" class="hover:text-white transition-colors">
+                  autocerrajeriasos@gmail.com
+                </a>
+              </li>
+              <li class="flex items-start gap-2">
+                <iconify-icon icon="solar:clock-circle-linear" class="text-secondary mt-0.5" width="14"></iconify-icon>
+                <span class="lang-es">L-S: 7:00 AM+</span>
+                <span class="lang-en">M-S: 7:00 AM+</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-12 pt-6 border-t border-border-std flex flex-col items-start gap-2 text-[10px] text-gray-500 w-full md:flex-row md:justify-between md:items-center">
+          <p>
+            <span class="lang-es">
+              © 2024 Autocerrajería SOS. Todos los derechos reservados.
+            </span>
+            <span class="lang-en">
+              © 2024 Autocerrajería SOS. All rights reserved.
+            </span>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script data-aura-video-controller="true">
+      (function () {
+        function playVideo(video) {
+          var promise = video.play();
+          if (promise && typeof promise.catch === "function") {
+            promise.catch(function () {});
+          }
+        }
+
+        function setupVideo(video) {
+          if (video.__auraVideoReady === true) return;
+          video.__auraVideoReady = true;
+          video.removeAttribute("data-aura-video-ready");
+          video.removeAttribute("data-aura-video-played");
+          video.muted = true;
+          video.playsInline = true;
+
+          var preset = video.dataset.auraVideoPreset || "loop-in-view";
+          if (preset === "hover") {
+            video.addEventListener("mouseenter", function () {
+              playVideo(video);
+            });
+            video.addEventListener("mouseleave", function () {
+              video.pause();
+              video.currentTime = 0;
+            });
+            return;
+          }
+
+          if (!("IntersectionObserver" in window)) {
+            playVideo(video);
+            return;
+          }
+
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                if (preset === "play-once" && video.__auraVideoPlayed === true) {
+                  return;
+                }
+                playVideo(video);
+              } else {
+                video.pause();
+              }
+            });
+          }, { threshold: 0.35 });
+
+          if (preset === "play-once") {
+            video.addEventListener("ended", function () {
+              video.__auraVideoPlayed = true;
+            }, { once: true });
+          }
+
+          observer.observe(video);
+        }
+
+        function setupVideos() {
+          document
+            .querySelectorAll("video[data-aura-video-preset]")
+            .forEach(setupVideo);
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", setupVideos);
+        } else {
+          setupVideos();
+        }
+      })();
+    </script>
+
+    <script>
+      (function(){
+        function setWhatsAppLinksByLang(){
+          var lang = document.body.getAttribute('data-lang') || 'es';
+
+          var links = {
+            general: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20un%20servicio%20de%20autocerrajer%C3%ADa.',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20would%20like%20a%20quote%20for%20an%20automotive%20locksmith%20service.'
+            },
+            chip: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20programaci%C3%B3n%20de%20llave%20con%20chip.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o.',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20would%20like%20a%20quote%20for%20chip%20key%20programming.%20My%20vehicle%20is%3A%20make%2C%20model%2C%20and%20year.'
+            },
+            smart: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20programaci%C3%B3n%20de%20smart%20key.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o.',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20would%20like%20a%20quote%20for%20smart%20key%20programming.%20My%20vehicle%20is%3A%20make%2C%20model%2C%20and%20year.'
+            },
+            allLost: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20perd%C3%AD%20todas%20las%20llaves%20de%20mi%20veh%C3%ADculo%20y%20necesito%20una%20cotizaci%C3%B3n.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o.',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20lost%20all%20the%20keys%20to%20my%20vehicle%20and%20need%20a%20quote.%20My%20vehicle%20is%3A%20make%2C%20model%2C%20and%20year.'
+            },
+            duplicate: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20duplicado%20de%20llave%20automotriz.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o.',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20would%20like%20a%20quote%20for%20automotive%20key%20duplication.%20My%20vehicle%20is%3A%20make%2C%20model%2C%20and%20year.'
+            },
+            cutting: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20corte%20de%20llave%20automotriz.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o.',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20would%20like%20a%20quote%20for%20automotive%20key%20cutting.%20My%20vehicle%20is%3A%20make%2C%20model%2C%20and%20year.'
+            },
+            lockout: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20necesito%20asistencia%20para%20apertura%20de%20veh%C3%ADculo.%20Dej%C3%A9%20las%20llaves%20dentro%20o%20no%20puedo%20acceder%20al%20veh%C3%ADculo.%20Mi%20ubicaci%C3%B3n%20aproximada%20es%3A',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20need%20help%20opening%20my%20vehicle.%20I%20left%20the%20keys%20inside%20or%20cannot%20access%20the%20vehicle.%20My%20approximate%20location%20is%3A'
+            },
+            remote: {
+              es: 'https://wa.me/17872011050?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20para%20reemplazo%20o%20programaci%C3%B3n%20de%20control%20remoto%20%2F%20key%20fob.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o.',
+              en: 'https://wa.me/17872011050?text=Hello%2C%20I%20would%20like%20a%20quote%20for%20remote%20or%20key%20fob%20replacement%2Fprogramming.%20My%20vehicle%20is%3A%20make%2C%20model%2C%20and%20year.'
+            }
+          };
+
+          var map = [
+            { sel: '[data-aura-edit-target="aet-21"]', key: 'general' },
+            { sel: '[data-aura-edit-target="aet-38"]', key: 'general' },
+            { sel: '[data-aura-edit-target="aet-47"]', key: 'general' },
+            { sel: '[data-aura-edit-target="aet-116"]', key: 'general' },
+            { sel: '[data-aura-edit-target="aet-67"]', key: 'chip' },
+            { sel: '[data-aura-edit-target="aet-74"]', key: 'smart' },
+            { sel: '[data-aura-edit-target="aet-81"]', key: 'allLost' },
+            { sel: '[data-aura-edit-target="aet-88"]', key: 'duplicate' },
+            { sel: '[data-aura-edit-target="aet-95"]', key: 'cutting' },
+            { sel: '[data-aura-edit-target="aet-102"]', key: 'lockout' },
+            { sel: '[data-aura-edit-target="aet-109"]', key: 'remote' }
+          ];
+
+          map.forEach(function(item){
+            var el = document.querySelector(item.sel);
+            if(!el) return;
+            var href = (links[item.key] && links[item.key][lang]) ? links[item.key][lang] : links.general[lang];
+            el.setAttribute('href', href);
+            el.setAttribute('target', '_blank');
+            el.setAttribute('rel', 'noopener noreferrer');
+          });
+        }
+
+        setWhatsAppLinksByLang();
+
+        var originalSetAttribute = document.body.setAttribute;
+        document.body.setAttribute = function(name, value){
+          originalSetAttribute.call(this, name, value);
+          if(name === 'data-lang'){
+            setWhatsAppLinksByLang();
+          }
+        };
+      })();
+    </script>
+
+    <script>
+      (function() {
+        function setupForm() {
+          var form = document.querySelector('form[data-aura-form="true"]');
+          if (form && !form.dataset.ajaxSetup) {
+            form.dataset.ajaxSetup = 'true';
+            form.addEventListener('submit', function(e) {
+              e.preventDefault();
+              var btn = form.querySelector('button[type="submit"]');
+              var esSpan = btn.querySelector('.lang-es');
+              var enSpan = btn.querySelector('.lang-en');
+              var originalEs = esSpan.textContent;
+              var originalEn = enSpan.textContent;
+
+              btn.disabled = true;
+              btn.classList.add('opacity-70', 'cursor-not-allowed', 'animate-pulse');
+              esSpan.textContent = 'Enviando...';
+              enSpan.textContent = 'Sending...';
+
+              var successMsg = form.querySelector('.form-success-message');
+              var errorMsg = form.querySelector('.form-error-message');
+              successMsg.classList.add('hidden');
+              errorMsg.classList.add('hidden');
+
+              var formData = new FormData(form);
+              fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                  'Accept': 'application/json'
+                }
+              })
+              .then(function(response) {
+                if (response.ok) {
+                  successMsg.classList.remove('hidden');
+                  form.reset();
+                } else {
+                  errorMsg.classList.remove('hidden');
+                }
+              })
+              .catch(function() {
+                errorMsg.classList.remove('hidden');
+              })
+              .finally(function() {
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed', 'animate-pulse');
+                esSpan.textContent = originalEs;
+                enSpan.textContent = originalEn;
+              });
+            });
+          }
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', setupForm);
+        } else {
+          setupForm();
+        }
+      })();
+    </script>
+  
+</body></html>
