@@ -1,0 +1,16 @@
+{
+  "name": "autocerrajeria-sos",
+  "version": "1.0.0",
+  "description": "Autocerrajería SOS - Automotive locksmith service in Puerto Rico",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
