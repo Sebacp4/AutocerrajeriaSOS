@@ -274,10 +274,7 @@ background-color: #1a1a1a;
 },
 "description": "Automotive locksmith mobile service."
 }
-</script>
-<!-- Vercel Web Analytics -->
-<script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
-</head>
+</script></head>
   <body class="bg-main text-gray-100 font-sans antialiased flex flex-col min-h-screen selection:bg-primary selection:text-black" data-lang="es">
     <!-- Background (image) added by Aura -->
     <div class="fixed top-0 w-full h-screen bg-cover bg-center -z-10" style="background-image: url(&quot;https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_3840w.png&quot;);; mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)" data-alpha-mask="80"></div>
@@ -1795,6 +1792,13 @@ background-color: #1a1a1a;
                 if (response.ok) {
                   successMsg.classList.remove('hidden');
                   form.reset();
+                  if(typeof window.gtag === 'function') {
+                    window.gtag('event', 'quote_form_submit', {
+                      'method': 'form',
+                      'form_name': 'quote_request',
+                      'page_location': window.location.href
+                    });
+                  }
                 } else {
                   errorMsg.classList.remove('hidden');
                 }
@@ -1817,6 +1821,29 @@ background-color: #1a1a1a;
         } else {
           setupForm();
         }
+
+        document.addEventListener('click', function(e) {
+          var target = e.target.closest('a');
+          if (!target || !target.href) return;
+          var href = target.href;
+          if (href.startsWith('tel:')) {
+            if(typeof window.gtag === 'function') {
+              window.gtag('event', 'click_call', {
+                'method': 'phone',
+                'phone_number': '7872011050',
+                'page_location': window.location.href
+              });
+            }
+          } else if (href.includes('wa.me') || href.includes('whatsapp')) {
+            if(typeof window.gtag === 'function') {
+              window.gtag('event', 'click_whatsapp', {
+                'method': 'whatsapp',
+                'phone_number': '7872011050',
+                'page_location': window.location.href
+              });
+            }
+          }
+        });
       })();
     </script>
   
