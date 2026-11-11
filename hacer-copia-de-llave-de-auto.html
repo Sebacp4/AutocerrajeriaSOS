@@ -278,7 +278,39 @@ background-color: #1a1a1a;
 },
 "description": "Servicio móvil de autocerrajería automotriz en Puerto Rico especializado en hacer copia de llave de auto, duplicado de llaves, llaves con chip, smart keys, controles, programación y cotización personalizada según vehículo."
 }
-</script></head>
+</script>
+<script>document.addEventListener('click', event => {
+const anchor = event.target.closest?.('a[href]');
+const href = anchor?.getAttribute('href');
+if (event.defaultPrevented || !href?.startsWith('#')) return;
+event.preventDefault();
+// Hash routers need a real hashchange in this frame. Letting the anchor
+// navigate normally would resolve against the parent URL of srcdoc.
+if (href.startsWith('#/') || href.startsWith('#!/')) {
+window.location.hash = href;
+return;
+}
+if (href === '#') { window.scrollTo({top: 0, behavior: 'smooth'}); return; }
+try {
+const id = decodeURIComponent(href.slice(1));
+const target = document.getElementById(id) || document.getElementsByName(id)[0];
+target?.scrollIntoView({behavior: 'smooth', block: 'start'});
+} catch { /* Invalid fragments remain in the saved document. */ }
+});</script>
+<script>document.addEventListener('click', event => {
+if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+const anchor = event.target.closest?.('a[href]');
+if (!anchor || anchor.hasAttribute('download')) return;
+const target = anchor.getAttribute('target')?.toLowerCase();
+if (target && target !== '_self' && target !== '_top') return;
+try {
+const destination = new URL(anchor.href, document.baseURI);
+const base = new URL(document.baseURI);
+if (!['http:', 'https:'].includes(destination.protocol) || destination.origin === base.origin) return;
+event.preventDefault();
+window.open(destination.href, '_blank', 'noopener,noreferrer');
+} catch { /* Leave invalid links to the browser. */ }
+}, true);</script></head>
   <body class="bg-main text-gray-100 font-sans antialiased flex flex-col min-h-screen selection:bg-primary selection:text-black" data-lang="es">
     <!-- Background (image) added by Aura -->
     <div class="fixed top-0 w-full h-screen bg-cover bg-center -z-10" style="background-image: url(&quot;https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/00ae460a-c169-480f-ba59-b80e4228ed34_3840w.png&quot;);; mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)" data-alpha-mask="80"></div>
@@ -297,15 +329,15 @@ background-color: #1a1a1a;
             </span>
             autocerrajeriasos@gmail.com
           </a>
-          <a href="tel:7872011050" class="flex items-center gap-2 hover:text-white transition-colors shrink-0">
+          <a href="tel:+17872011050" class="flex items-center gap-2 hover:text-white transition-colors shrink-0">
             <span class="w-6 h-6 rounded-full bg-alt border border-border-std flex items-center justify-center text-primary shadow-inner">
-              <iconify-icon icon="solar:phone-linear" width="14" stroke-width="1.5" class=""></iconify-icon>
+              <iconify-icon icon="solar:phone-linear" width="14" stroke-width="1.5"></iconify-icon>
             </span>
             (787) 201-1050
           </a>
           <div class="flex items-center gap-2 shrink-0">
             <span class="w-6 h-6 rounded-full bg-alt border border-border-std flex items-center justify-center text-primary shadow-inner">
-              <iconify-icon icon="solar:map-point-linear" width="14" stroke-width="1.5" class=""></iconify-icon>
+              <iconify-icon icon="solar:map-point-linear" width="14" stroke-width="1.5"></iconify-icon>
             </span>
             <span class="lang-es">Servicio Móvil PR</span>
             <span class="lang-en">Mobile Service PR</span>
@@ -378,12 +410,12 @@ background-color: #1a1a1a;
               <span class="lang-es">Asistencia Móvil</span>
               <span class="lang-en">Mobile Assistance</span>
             </span>
-            <a href="tel:7872011050" class="font-heading text-xl tracking-tight text-white font-medium hover:text-gray-300 transition-colors">
+            <a href="tel:+17872011050" class="font-heading text-xl tracking-tight text-white font-medium hover:text-gray-300 transition-colors">
               (787) 201-1050
             </a>
           </div>
-          <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white uppercase inline-flex items-center gap-2 text-sm font-bold tracking-widest rounded-pill pt-2.5 pr-6 pb-2.5 pl-6 shadow-[0_0_15px_rgba(37,211,102,0.4)] -translate-x-2 scale-75 transition-colors">
-            <iconify-icon icon="solar:phone-calling-linear" width="18" stroke-width="1.5" class=""></iconify-icon>
+          <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white uppercase inline-flex items-center gap-2 text-sm font-bold tracking-widest rounded-pill pt-2.5 pr-6 pb-2.5 pl-6 shadow-[0_0_15px_rgba(37,211,102,0.4)] -translate-x-2 scale-75 transition-colors">
+            <iconify-icon icon="solar:phone-calling-linear" width="18" stroke-width="1.5"></iconify-icon>
             <span class="lang-es">Llamar Ahora</span>
             <span class="lang-en">Call Now</span>
           </a>
@@ -422,7 +454,7 @@ background-color: #1a1a1a;
       <a href="https://wa.me/17872011050?text=Hola%2C%20necesito%20hacer%20copia%20de%20llave%20de%20auto.%20Mi%20veh%C3%ADculo%20es%3A%20marca%2C%20modelo%20y%20a%C3%B1o.%20Estoy%20ubicado%20en%3A%20pueblo%20o%20%C3%A1rea." class="fixed bottom-6 left-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center bg-alt border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors shadow-lg" target="_blank" rel="noopener noreferrer" data-whatsapp-type="general">
         <iconify-icon icon="ic:baseline-whatsapp" width="24" class="text-current transition-colors"></iconify-icon>
       </a>
-      <a href="tel:7872011050" class="fixed bottom-6 right-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center bg-[#25D366] hover:bg-[#128C7E] shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
+      <a href="tel:+17872011050" class="fixed bottom-6 right-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center bg-[#25D366] hover:bg-[#128C7E] shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
         <iconify-icon icon="solar:phone-bold" width="24" class="text-white"></iconify-icon>
       </a>
 
@@ -461,7 +493,7 @@ background-color: #1a1a1a;
                   <span class="lang-es">Servicio a domicilio</span>
                   <span class="lang-en">Mobile Service</span>
                 </span>
-                <iconify-icon icon="solar:alt-arrow-right-linear" class=""></iconify-icon>
+                <iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon>
                 <span class="text-chrome">
                   <span class="lang-es">Área Metro, PR</span>
                   <span class="lang-en">Metro Area, PR</span>
@@ -496,7 +528,7 @@ background-color: #1a1a1a;
                     make, model, year, and key type.
                   </span>
                 </p>
-                <div class="">
+                <div>
                   <div class="mx-auto bg-[#D99A1E] w-48 sm:w-64 h-[3px] mb-4"></div>
                   <p class="text-gray-300 text-center">
                     <span class="lang-es">
@@ -511,8 +543,8 @@ background-color: #1a1a1a;
 
               <ul class="space-y-3 mb-10 text-sm md:text-base text-gray-300">
                 <div class="flex flex-wrap gap-4 mb-8">
-                  <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-3 rounded-std text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
-                    <iconify-icon icon="solar:phone-bold" width="20" class=""></iconify-icon>
+                  <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-3 rounded-std text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors">
+                    <iconify-icon icon="solar:phone-bold" width="20"></iconify-icon>
                     <span class="lang-es">Llamar Ahora</span>
                     <span class="lang-en">Call Now</span>
                   </a>
@@ -606,11 +638,11 @@ background-color: #1a1a1a;
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <!-- Left Card: Content -->
           <div class="lg:col-span-5 glass-card rounded-lg p-8 md:p-10 flex flex-col justify-between">
-            <div class="">
+            <div>
               <h2 class="md:text-4xl uppercase text-3xl font-medium text-white tracking-tight font-heading text-center mb-6">
                 <span class="lang-es">
                   Servicio a domicilio en el
-                  <br class="">
+                  <br>
                   Área Metro de
                   <br>
                   Puerto Rico
@@ -636,7 +668,7 @@ background-color: #1a1a1a;
               </p>
 
               <div class="grid grid-cols-3 gap-2 md:gap-4 mb-8">
-                <div class="">
+                <div>
                   <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider">
                     <span class="lang-es">100% MÓVIL</span>
                     <span class="lang-en">100% MOBILE</span>
@@ -646,7 +678,7 @@ background-color: #1a1a1a;
                     <span class="lang-en">At-home service</span>
                   </div>
                 </div>
-                <div class="">
+                <div>
                   <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider">
                     7:00 AM+
                   </div>
@@ -655,7 +687,7 @@ background-color: #1a1a1a;
                     <span class="lang-en">Mon to Sat</span>
                   </div>
                 </div>
-                <div class="">
+                <div>
                   <div class="text-secondary font-brand text-[15px] md:text-lg font-bold tracking-wider leading-tight">
                     <span class="lang-es">
                       ÁREA
@@ -861,7 +893,7 @@ background-color: #1a1a1a;
                 </span>
               </p>
               <div class="flex flex-col sm:flex-row gap-2 mt-auto">
-                <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
+                <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
                   <iconify-icon icon="solar:phone-bold"></iconify-icon>
                   <span class="lang-es">Llamar</span>
                   <span class="lang-en">Call</span>
@@ -898,7 +930,7 @@ background-color: #1a1a1a;
                 </span>
               </p>
               <div class="flex flex-col sm:flex-row gap-2 mt-auto">
-                <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
+                <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
                   <iconify-icon icon="solar:phone-bold"></iconify-icon>
                   <span class="lang-es">Llamar</span>
                   <span class="lang-en">Call</span>
@@ -935,7 +967,7 @@ background-color: #1a1a1a;
                 </span>
               </p>
               <div class="flex flex-col sm:flex-row gap-2 mt-auto">
-                <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
+                <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
                   <iconify-icon icon="solar:phone-bold"></iconify-icon>
                   <span class="lang-es">Llamar</span>
                   <span class="lang-en">Call</span>
@@ -972,7 +1004,7 @@ background-color: #1a1a1a;
                 </span>
               </p>
               <div class="flex flex-col sm:flex-row gap-2 mt-auto">
-                <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
+                <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
                   <iconify-icon icon="solar:phone-bold"></iconify-icon>
                   <span class="lang-es">Llamar</span>
                   <span class="lang-en">Call</span>
@@ -1008,7 +1040,7 @@ background-color: #1a1a1a;
                 </span>
               </p>
               <div class="flex flex-col sm:flex-row gap-2 mt-auto">
-                <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
+                <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
                   <iconify-icon icon="solar:phone-bold"></iconify-icon>
                   <span class="lang-es">Llamar</span>
                   <span class="lang-en">Call</span>
@@ -1045,7 +1077,7 @@ background-color: #1a1a1a;
                 </span>
               </p>
               <div class="flex flex-col sm:flex-row gap-2 mt-auto">
-                <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
+                <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
                   <iconify-icon icon="solar:phone-bold"></iconify-icon>
                   <span class="lang-es">Llamar</span>
                   <span class="lang-en">Call</span>
@@ -1082,7 +1114,7 @@ background-color: #1a1a1a;
                 </span>
               </p>
               <div class="flex flex-col sm:flex-row gap-2 mt-auto">
-                <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
+                <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-2 px-4 rounded-std text-[10px] font-bold uppercase tracking-wider flex-1 text-center transition-colors shadow-[0_0_10px_rgba(37,211,102,0.3)] flex items-center justify-center gap-1">
                   <iconify-icon icon="solar:phone-bold"></iconify-icon>
                   <span class="lang-es">Llamar</span>
                   <span class="lang-en">Call</span>
@@ -1208,7 +1240,7 @@ background-color: #1a1a1a;
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 mb-10">
-              <a href="tel:7872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-6 py-3 rounded-std text-sm font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors flex-1">
+              <a href="tel:+17872011050" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-6 py-3 rounded-std text-sm font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.4)] transition-colors flex-1">
                 <iconify-icon icon="solar:phone-bold" width="20"></iconify-icon>
                 (787) 201-1050
               </a>
@@ -1596,37 +1628,37 @@ background-color: #1a1a1a;
             </p>
           </div>
 
-          <div class="">
+          <div>
             <h4 class="text-sm font-medium text-white uppercase tracking-wider mb-4">
               <span class="lang-es">Enlaces Rápidos</span>
               <span class="lang-en">Quick Links</span>
             </h4>
             <ul class="space-y-2 text-xs text-gray-400">
-              <li class="">
+              <li>
                 <a href="#" class="hover:text-white transition-colors">
                   <span class="lang-es">Inicio</span>
                   <span class="lang-en">Home</span>
                 </a>
               </li>
-              <li class="">
+              <li>
                 <a href="#servicios" class="hover:text-white transition-colors">
                   <span class="lang-es">Servicios</span>
                   <span class="lang-en">Services</span>
                 </a>
               </li>
-              <li class="">
+              <li>
                 <a href="#proceso" class="hover:text-white transition-colors">
                   <span class="lang-es">Proceso</span>
                   <span class="lang-en">Process</span>
                 </a>
               </li>
-              <li class="">
+              <li>
                 <a href="#areas" class="hover:text-white transition-colors">
                   <span class="lang-es">Áreas</span>
                   <span class="lang-en">Areas</span>
                 </a>
               </li>
-              <li class="">
+              <li>
                 <a href="#contacto" class="hover:text-white transition-colors">
                   <span class="lang-es">Contacto</span>
                   <span class="lang-en">Contact</span>
@@ -1635,7 +1667,7 @@ background-color: #1a1a1a;
             </ul>
           </div>
 
-          <div class="">
+          <div>
             <h4 class="text-sm font-medium text-white uppercase tracking-wider mb-4">
               <span class="lang-es">Contacto</span>
               <span class="lang-en">Contact</span>
@@ -1643,7 +1675,7 @@ background-color: #1a1a1a;
             <ul class="space-y-3 text-xs text-gray-400">
               <li class="flex items-start gap-2">
                 <iconify-icon icon="solar:phone-linear" class="text-secondary mt-0.5" width="14"></iconify-icon>
-                <a href="tel:7872011050" class="hover:text-white transition-colors">
+                <a href="tel:+17872011050" class="hover:text-white transition-colors">
                   (787) 201-1050
                 </a>
               </li>
